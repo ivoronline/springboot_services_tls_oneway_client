@@ -19,7 +19,7 @@ public class MyRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
 
     //GET REQUEST FACTORY (for One-Way TLS)
-    HttpComponentsClientHttpRequestFactory requestFactory = UtilTLS.getRequestFactory();
+    HttpComponentsClientHttpRequestFactory requestFactory = UtilTLS.getRequestFactoryForOneWayTLS();
 
     //SEND REQUEST
     RestTemplate    restTemplate = new RestTemplate();

@@ -21,7 +21,7 @@ public class UtilTLS {
   //=======================================================================================
   // GET REQUEST FACTORY
   //=======================================================================================
-  public static HttpComponentsClientHttpRequestFactory getRequestFactory() throws Exception {
+  public static HttpComponentsClientHttpRequestFactory getRequestFactoryForOneWayTLS() throws Exception {
 
     //LOAD TRUST STORE
     ClassPathResource classPathResource = new ClassPathResource(clientTrustStoreName);
