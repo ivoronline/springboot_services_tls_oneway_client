@@ -5,33 +5,28 @@ import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import javax.net.ssl.SSLContext;
-import java.io.InputStream;
 import java.security.KeyStore;
 
-public class UtilTLS {
-
-  //CLIENT TRUST STORE
-  static String clientTrustStoreName     = "ClientTrustStore.jks";
-  static String clientTrustStoreType     = "JKS";
-  static String clientTrustStorePassword = "mypassword";
+public class UtilClientRestTemplate {
 
   //=======================================================================================
-  // GET REQUEST FACTORY
+  // GET REQUEST FACTORY FOR ONE WAY TLS
   //=======================================================================================
-  public static HttpComponentsClientHttpRequestFactory getRequestFactoryForOneWayTLS() throws Exception {
+  // Difference is in SSLContext => TrustMaterial
+  public static HttpComponentsClientHttpRequestFactory getRequestFactoryForOneWayTLS(
+    String trustStoreName,     //"/MyKeyStore.jks"
+    String trustStorePassword, //"mypassword";
+    String trustStoreType      //"JKS"
+  ) throws Exception {
 
-    //LOAD TRUST STORE
-    ClassPathResource classPathResource = new ClassPathResource(clientTrustStoreName);
-    InputStream       inputStream       = classPathResource.getInputStream();
-    KeyStore          trustStore        = KeyStore.getInstance(clientTrustStoreType);
-                      trustStore.load(inputStream, clientTrustStorePassword.toCharArray());
+    //LOAD TRUST STORE (For One-Way TLS)
+    KeyStore trustStore = UtilKeys.getStore(trustStoreName, trustStorePassword, trustStoreType);
 
     //CONFIGURE REQUEST FACTORY
     SSLContext sslContext = new SSLContextBuilder()
-      .loadTrustMaterial(trustStore, null)
+      .loadTrustMaterial(trustStore, null) //For One-Way TLS
       .build();
 
     SSLConnectionSocketFactory socketFactory = new SSLConnectionSocketFactory(

@@ -10,7 +10,12 @@ import java.net.URI;
 public class MyRunner implements CommandLineRunner {
 
   //PROPERTIES
-  String serverURL = "https://localhost:8085/Hello";
+  String serverURL                = "https://localhost:8085/Hello";
+
+  //CLIENT TRUST STORE
+  String clientTrustStoreName     = "ClientTrustStore.jks";
+  String clientTrustStorePassword = "mypassword";
+  String clientTrustStoreType     = "JKS";
 
   //===============================================================================
   // RUN
@@ -19,7 +24,11 @@ public class MyRunner implements CommandLineRunner {
   public void run(String... args) throws Exception {
 
     //GET REQUEST FACTORY (for One-Way TLS)
-    HttpComponentsClientHttpRequestFactory requestFactory = UtilTLS.getRequestFactoryForOneWayTLS();
+    HttpComponentsClientHttpRequestFactory requestFactory = UtilClientRestTemplate.getRequestFactoryForOneWayTLS(
+      clientTrustStoreName,
+      clientTrustStorePassword,
+      clientTrustStoreType
+    );
 
     //SEND REQUEST
     RestTemplate    restTemplate = new RestTemplate();
